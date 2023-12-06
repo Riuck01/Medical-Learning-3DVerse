@@ -30,6 +30,10 @@ body {
   position: relative;
 }
 
+.test {
+  color: white;
+}
+
 #display-canvas:hover {
   cursor: grab;
 }
