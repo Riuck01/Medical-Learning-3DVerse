@@ -1,121 +1,70 @@
-# First Person Controller
+# Getting Started with Create React App
 
-![First Person Character Controller](https://github.com/3dverse/sample-first-person-controller/blob/main/screenshot.png?raw=true)
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Try it out
+## Available Scripts
 
-[Try it out](https://3dverse.github.io/sample-first-person-controller/)
+In the project directory, you can run:
 
-## Description
+### `npm start`
 
-Simple first person template application with character and camera controller. Character can be idle, walk, run and emote depending on user inputs.
+Runs the app in the development mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-Functions with gamepad and mouse/keyboard.
+The page will reload when you make changes.\
+You may also see any lint errors in the console.
 
-Multiplayer.
+### `npm test`
 
-### Controls
+Launches the test runner in the interactive watch mode.\
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-|             | Gamepad        | Mouse/Keyboard |
-| ----------- | -------------- | -------------- |
-| Move around | Left Joystick  | WASD           |
-| Look around | Right Joystick | LMB            |
-| Run         | Right Trigger  | E              |
-| Emote       | Left Trigger   | Q              |
+### `npm run build`
 
-# How does it work?
+Builds the app for production to the `build` folder.\
+It correctly bundles React in production mode and optimizes the build for the best performance.
 
-Every client that runs this application will either start a new session of the scene named 'Main Scene', or join an ongoing session if there is one running already. After 'Main Scene' is opened and the physics simulation is started, the application spawns the character. Every new client will appear as a character in the scene. For the best experience, limit the number of players to a maximum of 4.
+The build is minified and the filenames include the hashes.\
+Your app is ready to be deployed!
 
-## Assets inside
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-/Public
+### `npm run eject`
 
-- Main Scene: `scene` containing the level that your character will move in. The level is physics-ready, with colliders around all of the meshes.
-- Character Controller: `scene` containing the character controller set up, referencing the character model, the animation graph, and the first-person controller script.
-- First Person Controller: `script` containing character controller and camera controller movement logic. Also contains logic to trigger states in the animation graph.
-- AG_Locomotion: `animation graph` containing logic to go from idle to locomotion to emote states
+**Note: this is a one-way operation. Once you `eject`, you can't go back!**
 
-/X3DV_Droid
+If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-- X3DV_Droid: `scene` containing with the animated model of the 3dverse bot named X3DV_Droid
-- SKM_X3DV_Droid: skinned `mesh` of X3DV_Droid
-- SK_X3DV_Droid: `skeleton` of X3DV_Droid
-- AS_X3DV_Droid: `animation set` of X3DV_Droid. Gathers the animations found in the /X3DV_Droid/Animations file and associates them to nodes in the animation graph
-- /Materials contains `material`s of X3DV_Droid
-- /Animations contains `animation`s of X3DV_Droid
+Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
 
-/Level Design
+You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
 
-- SM_Cube: `mesh` of a cube that is used to create the level in 'Main Scene'
-- 4 `material`s titled as 'MAT_LD\_\<COLOR\>' that are used to create the level in 'Main Scene'
+## Learn More
 
-## Run it locally
+You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-Replace the following values in [config.js](./config.js):
+To learn React, check out the [React documentation](https://reactjs.org/).
 
-- '%YOUR_PUBLIC_TOKEN%' by the public token of your application found in the "API Access" section.
-- '%YOUR_MAIN_SCENE_UUID%' by the UUID of the main scene generated in the Public folder of the "Asset browser" section.
-- '%YOUR_CHARACTER_CONTROLLER_SCENE_UUID%' by the UUID of the character controller scene generated in the Public folder of the "Asset browser" section.
+### Code Splitting
 
-The application is a static frontend that can be served by any web server of your convenience.
+This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
 
-### Node
+### Analyzing the Bundle Size
 
-You can use the [serve](https://www.npmjs.com/package/serve) package:
+This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
 
-```
-npx serve
-```
+### Making a Progressive Web App
 
-### Python
+This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
 
-You can use the [http.serve](https://docs.python.org/3/library/http.server.html) command:
+### Advanced Configuration
 
-```
-python -m http.server
-```
+This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
 
-Now open your web browser at the url indicated by your server (http://localhost:XXXX) to run your application.
+### Deployment
 
-## What's next
+This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
 
-### View and edit with Scene Editor
+### `npm run build` fails to minify
 
-While your application is running, navigate to "Sessions" and join the ongoing session of your application.
-
-You have now joined the application's session in the Scene Editor, where you can view and live edit your application.
-
-### Edit with Animation Graph Editor
-
-Open your animation graph and try playing with its logic using the animations found in /X3DV_Droid/Animations.
-
-Change the animations that are referenced in the animation set entries, or affect the playback speed of an Animation Sample node.
-
-After publishing, modifications in the animation graph can be seen live in your sessions.
-
-This allows you to work on your animation graph while your application is running and seeing the changes in real time.
-
-For information about how to edit the animation graph and skeletal animation in 3dverse, [see here](https://3dverse.com/docs/deep-dive/skeletal-animation/).
-
-### Replace X3DV_Droid with your own character model
-
-Upload your skinned model in the Asset Browser.
-
-Upload some idle, walk, run and optionally, emote animations.
-
-If you're uploading the animations in separate files, specify your model's skeleton as the skeleton to use in the conversion process.
-
-Open the 'AG_Locomotion' animation graph in the Animation Graph Editor.
-
-Create a new animation set in the Animation Set Editor tab and call it 'AS\_\<MyCharacterName\>'.
-
-Drag your own model's animations to match the animation set's entries (idle, walk, run, etc.).
-
-Open your model's scene and attach 'AG_Locomotion' and 'AS\_\<MyCharacterName\>' to the animation controller component.
-
-Finally, in the 'Character Controller' scene, replace the X3DV_Droid entity by an entity referencing your model's scene.
-
-Run your application.
-
-The character should now be your model.
+This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
