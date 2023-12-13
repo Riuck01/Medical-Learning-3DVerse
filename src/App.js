@@ -5,8 +5,8 @@ import { HUD } from './HUD';
 function App() {
   return (
     <div className='App'>
-      <Canvas />
-      <HUD />
+      <HUD/>
+      <Canvas/>
     </div>
   );
 }
