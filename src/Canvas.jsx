@@ -24,8 +24,9 @@ export const Canvas = () => {
       viewportProperties: {
         defaultControllerType: SDK3DVerse.controller_type.orbit,
       },
-    });
-    await InitFirstPersonController(characterControllerSceneUUID);
+    }).then(async () => {
+      await InitFirstPersonController(characterControllerSceneUUID);
+    })
   }, []);
 
   async function InitFirstPersonController(charCtlSceneUUID) {
