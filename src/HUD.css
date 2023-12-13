@@ -2,4 +2,6 @@
 .HUD {
     position: absolute;
     display: flex;
+    color: white;
+    margin-left: 2em;
 }
