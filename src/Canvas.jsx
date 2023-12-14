@@ -5,10 +5,19 @@ import {
     mainSceneUUID,
     characterControllerSceneUUID,
   } from "./config.js";
+import { VideoPlayer, importCssRenderer } from './VideoPlayer';
+
 
 export const Canvas = () => {
   const status = useScript(
     `https://cdn.3dverse.com/legacy/sdk/latest/SDK3DVerse.js`,
+    {
+      removeOnUnmount: false,
+    }
+  );
+
+  const status_three = useScript(
+    `https://cdn.3dverse.com/legacy/sdk/stable/SDK3DVerse_ThreeJS_Ext.js`,
     {
       removeOnUnmount: false,
     }
@@ -25,6 +34,13 @@ export const Canvas = () => {
         defaultControllerType: SDK3DVerse.controller_type.orbit,
       },
     }).then(async () => {
+      //await SDK3DVerse.installExtension(SDK3DVerse_ThreeJS_Ext);
+
+      const playerEntity = await SDK3DVerse.engineAPI.findEntitiesByNames("Player")
+
+      const videoPlayer = new VideoPlayer(playerEntity);
+      window.sampleApp = { videoPlayer };
+      await videoPlayer.initialize();
       await InitFirstPersonController(characterControllerSceneUUID);
     })
   }, []);
@@ -72,10 +88,11 @@ export const Canvas = () => {
   }
 
   useEffect(() => {
-    if (status === 'ready') {
+    console.log(status, status_three)
+    if (status === 'ready' && status_three === 'ready') {
       initApp();
     }
-  }, [status]);
+  }, [status, status_three]);
 
   return (
     <>
