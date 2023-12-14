@@ -1,8 +1,18 @@
 import React, { useState } from 'react';
 import { PDFDocument, rgb } from 'pdf-lib';
+import { Document, Page } from 'react-pdf';
 import './PDF.css';
 
+
 export const PDF = () => {
+  /*const pdfURL = 'TEST.pdf';
+  return (
+    <div>
+      <Document file={pdfURL}>
+        <Page pageNumber={1} />
+      </Document>
+    </div>
+  );*/
   const [modalVisible, setModalVisible] = useState(false);
   const [pdfText, setPdfText] = useState(''); // État pour stocker le texte du PDF
 
@@ -14,7 +24,7 @@ export const PDF = () => {
 
       // Obtenez le texte du PDF
       const pages = pdfDoc.getPages();
-      const pdfText = await Promise.all(pages.map(page => page.getText()));
+      const pdfText = await Promise.all(pages.map(page => console.log(page)));
 
       setPdfText(pdfText.join('\n')); // Mettez le texte dans l'état du composant
       setModalVisible(true);
