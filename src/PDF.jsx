@@ -8,7 +8,7 @@ export const PDF = () => {
 
   const openModal = async () => {
     try {
-      const pdfUrl = './TEST2.pdf';
+      const pdfUrl = './TEST.pdf';
       const pdfBytes = await fetch(pdfUrl).then(res => res.arrayBuffer());
       const pdfDoc = await PDFDocument.load(pdfBytes);
 
