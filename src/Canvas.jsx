@@ -82,7 +82,7 @@ export const Canvas = () => {
       <canvas
         id='display-canvas'
         style={{
-          posistion: 'absolute',
+          display: 'flex',
           height: '100vh',
           width: '100vw',
           verticalAlign: 'middle',
