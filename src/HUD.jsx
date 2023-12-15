@@ -2,6 +2,7 @@ import './HUD.css'
 import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import { Qna } from './Qna';
 
 export function HUD() {
   const [show, setShow] = useState(false);
@@ -13,7 +14,7 @@ export function HUD() {
   const patientlName = "MEURET";
   const patientAge = "19";
   const patientProb = "joueur lol";
-  const patientInfo = "ありがとう";
+  const patientInfo = "";
 
   return (
     <div className='HUD'>
@@ -33,6 +34,7 @@ export function HUD() {
           </div>
         </Modal.Body>
       </Modal>
+      <Qna/>
     </div>
   );
 }
