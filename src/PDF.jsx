@@ -1,41 +1,44 @@
 import React, { useState } from 'react';
-import { PDFDocument, rgb } from 'pdf-lib';
-import { Document, Page } from 'react-pdf';
+import { Document, Page, pdfjs } from 'react-pdf';
 import './PDF.css';
 
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 export const PDF = () => {
-  /*const pdfURL = 'TEST.pdf';
-  return (
-    <div>
-      <Document file={pdfURL}>
-        <Page pageNumber={1} />
-      </Document>
-    </div>
-  );*/
   const [modalVisible, setModalVisible] = useState(false);
-  const [pdfText, setPdfText] = useState(''); // État pour stocker le texte du PDF
+  const [numPages, setNumPages] = useState(null);
+  const [error, setError] = useState(null);
+  const [pdfUrl, setPdfUrl] = useState('./TEST3.pdf'); // Initial PDF file
+
+  const onDocumentLoadSuccess = ({ numPages }) => {
+    setNumPages(numPages);
+  };
 
   const openModal = async () => {
     try {
-      const pdfUrl = './TEST.pdf';
+      console.log('Fetching PDF:', pdfUrl);
+
       const pdfBytes = await fetch(pdfUrl).then(res => res.arrayBuffer());
-      const pdfDoc = await PDFDocument.load(pdfBytes);
+      console.log('PDF Bytes:', pdfBytes);
 
-      // Obtenez le texte du PDF
-      const pages = pdfDoc.getPages();
-      const pdfText = await Promise.all(pages.map(page => console.log(page)));
+      const pdfDoc = new Uint8Array(pdfBytes);
+      const pdfText = new TextDecoder().decode(pdfDoc);
 
-      setPdfText(pdfText.join('\n')); // Mettez le texte dans l'état du composant
+      console.log('PDF Text:', pdfText);
+
       setModalVisible(true);
+      setError(null);
     } catch (error) {
-      console.error('Erreur lors du chargement du PDF :', error);
+      console.error('Error loading PDF:', error);
+      setModalVisible(true);
+      setError('Failed to load PDF file.');
     }
   };
 
   const closeModal = () => {
     setModalVisible(false);
-    setPdfText(''); // Réinitialisez le texte du PDF lorsque le modal est fermé
+    setNumPages(null);
+    setError(null);
   };
 
   return (
@@ -46,9 +49,17 @@ export const PDF = () => {
         <div className="modal-overlay">
           <div className="modal">
             <span className="close-button" onClick={closeModal}>&times;</span>
-            <div className="pdf-content">
-              <pre>{pdfText}</pre>
-            </div>
+            {error ? (
+              <div className="pdf-content-error">{error}</div>
+            ) : (
+              <div className="pdf-content">
+                <Document file={pdfUrl} onLoadSuccess={onDocumentLoadSuccess}>
+                  {Array.from(new Array(numPages), (el, index) => (
+                    <Page key={`page_${index + 1}`} pageNumber={index + 1} />
+                  ))}
+                </Document>
+              </div>
+            )}
           </div>
         </div>
       )}
