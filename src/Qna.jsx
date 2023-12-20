@@ -2,7 +2,6 @@ import './qna.css'
 import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import InputGroup from 'react-bootstrap/InputGroup';
 import Form from 'react-bootstrap/Form';
 
 export function Qna() {
@@ -11,9 +10,9 @@ export function Qna() {
   const openForm = () => setShow(true);
   const [curQuestionIndex, setCount] = useState(0);
   const questions = [
-    {title: "Laquelle de ces réponse n'est pas significative du fun ?", a1: "mdr", a2: "lol", a3: "connard", a4: "XD", },
-    {title: "Quel est mon main sur LoL ?", a1: "Aatrox", a2: "Jax", a3: "Diluc", a4: "Hwei", },
-    {title: "Tom va-t-il gagner sa game ?", a1: "non", a2: "non", a3: "non", a4: "non", },
+    {title: "Question 1: ......?", a1: "mauvaise reponse", a2: "mauvaise reponse", a3: "mauvaise reponse", a4: "bonne reponse", },
+    {title: "Question 2: ......?", a1: "mauvaise reponse", a2: "bonne reponse", a3: "mauvaise reponse", a4: "mauvaise reponse", },
+    {title: "Question 3: ......?", a1: "bonne reponse", a2: "mauvaise reponse", a3: "mauvaise reponse", a4: "mauvaise reponse", },
   ];
 
   const answers = {

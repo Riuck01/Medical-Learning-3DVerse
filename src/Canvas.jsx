@@ -6,15 +6,18 @@ import {
     characterControllerSceneUUID,
   } from "./config.js";
 
-export const Canvas = () => {
+export const Canvas = (props) => {
   const status = useScript(
     `https://cdn.3dverse.com/legacy/sdk/latest/SDK3DVerse.js`,
     {
       removeOnUnmount: false,
     }
   );
-
+  
   const initApp = useCallback(async () => {
+    // const playerBoundingBox = SDK3DVerse.engineAPI.cameraAPI.getActiveViewports()[0].getTransform();
+    
+    window.hudDisplayed = false;
     await SDK3DVerse.joinOrStartSession({
       userToken: publicToken,
       sceneUUID: mainSceneUUID,
@@ -25,7 +28,10 @@ export const Canvas = () => {
         defaultControllerType: SDK3DVerse.controller_type.orbit,
       },
     }).then(async () => {
-      await InitFirstPersonController(characterControllerSceneUUID);
+      console.log("session initalized");
+      await InitFirstPersonController(characterControllerSceneUUID).then(
+        console.log("character controler initialized")
+      );
     })
   }, []);
 
@@ -69,13 +75,24 @@ export const Canvas = () => {
   
     // Finally set the first person camera as the main camera.
     SDK3DVerse.setMainCamera(firstPersonCamera);
+
+    const doorBoundingBox = (await SDK3DVerse.engineAPI.findEntitiesByEUID('b4f86ad3-47d3-48cf-9305-1b69f85800d7'))[0];
+    
+    SDK3DVerse.engineAPI.onEnterTrigger((player, door) =>
+    {
+      console.log("colision occured");
+      if (door === doorBoundingBox)
+      {
+        props.props[1](!props.props[0]);
+      }
+    });
   }
 
   useEffect(() => {
     if (status === 'ready') {
       initApp();
     }
-  }, [status]);
+  }, [status, initApp]);
 
   return (
     <>
