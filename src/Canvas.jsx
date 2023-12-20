@@ -26,8 +26,31 @@ export const Canvas = () => {
       },
     }).then(async () => {
       await InitFirstPersonController(characterControllerSceneUUID);
+
+      await justGetThatPlease();
     })
   }, []);
+
+  async function justGetThatPlease() {
+    const scene = (await SDK3DVerse.engineAPI.findEntitiesByEUID("7643ab3f-d337-48cc-9475-e02b7aa9c49a"))[0];
+
+    console.log(scene)
+
+    const children = await scene.getChildren()
+
+    console.log(children)
+
+    const triggers = children.filter((child) =>
+        child.getName().startsWith("pdf-trigger") && child.isAttached('physics_material')
+    )
+
+    console.log(triggers)
+
+    SDK3DVerse.engineAPI.onEnterTrigger((emitterEntity, triggerEntity) =>
+    {
+        console.log(emitterEntity, " entered trigger of ", triggerEntity);
+    });
+  }
 
   async function InitFirstPersonController(charCtlSceneUUID) {
     // To spawn an entity we need to create an EntityTempllate and specify the
