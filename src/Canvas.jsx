@@ -13,6 +13,7 @@ export const Canvas = () => {
       removeOnUnmount: false,
     }
   );
+  const triggers = {}
 
   const initApp = useCallback(async () => {
     await SDK3DVerse.joinOrStartSession({
@@ -25,31 +26,86 @@ export const Canvas = () => {
         defaultControllerType: SDK3DVerse.controller_type.orbit,
       },
     }).then(async () => {
-      await InitFirstPersonController(characterControllerSceneUUID);
+        await InitFirstPersonController(characterControllerSceneUUID);
 
-      await justGetThatPlease();
+        await getAllLibraries();
+
+        SDK3DVerse.engineAPI.onEnterTrigger((emitterEntity, triggerEntity) =>
+        {
+            console.log(emitterEntity, " entered trigger of ", triggerEntity);
+            const parent = triggerEntity.getParent()
+            if (parent) {
+                for (const chap in triggers) {
+                    console.log(parent.getEUID() === triggers[chap][0], parent.getEUID(), triggers[chap][0])
+                    if (parent.getEUID() === triggers[chap][0])
+                        triggers[chap][1] = true
+                }
+            }
+        });
+
+        SDK3DVerse.engineAPI.onExitTrigger((emitterEntity, triggerEntity) =>
+        {
+            console.log(emitterEntity, " exited trigger of ", triggerEntity);
+            const parent = triggerEntity.getParent()
+            if (parent) {
+                for (const chap in triggers) {
+                    if (parent.getEUID() === triggers[chap][0])
+                        triggers[chap][1] = false
+                }
+            }
+        });
+
+        function update()
+        {
+
+        }
+        SDK3DVerse.notifier.on('onFramePreRender', update);
+
+        document.getElementById("display-canvas").addEventListener("mousedown", async (e) => {
+            console.log("clicked", e)
+
+            const object = (await SDK3DVerse.engineAPI.castScreenSpaceRay(e.screenX, e.screenY, false, false, true)).entity
+            console.log(object, object !== null)
+            if (object !== null) {
+                if (object.hasParent()) {
+                    let parent = object.getParent()
+
+                    console.log(parent.getName())
+                    while (!parent.getName().startsWith("biblio")) {
+                        if (parent.hasParent()) {
+                            parent = parent.getParent()
+                            console.log(parent.getName())
+                        } else {
+                            parent = null
+                            break
+                        }
+                    }
+
+                    console.log("We finally got this: "+parent)
+                }
+            }
+        })
     })
   }, []);
 
-  async function justGetThatPlease() {
+  async function getAllLibraries() {
     const scene = (await SDK3DVerse.engineAPI.findEntitiesByEUID("7643ab3f-d337-48cc-9475-e02b7aa9c49a"))[0];
-
-    console.log(scene)
 
     const children = await scene.getChildren()
 
-    console.log(children)
-
-    const triggers = children.filter((child) =>
-        child.getName().startsWith("pdf-trigger") && child.isAttached('physics_material')
+    const biblios = children.filter((child) =>
+        child.getName().startsWith("biblio")// && child.isAttached('physics_material')
     )
 
-    console.log(triggers)
+    for (const biblio of biblios) {
+        const hasTrigger = (await biblio.getChildren()).find((child) =>
+            child.getName() === "pdf-trigger" && child.isAttached('physics_material') && child.isAttached("box_geometry")
+        );
 
-    SDK3DVerse.engineAPI.onEnterTrigger((emitterEntity, triggerEntity) =>
-    {
-        console.log(emitterEntity, " entered trigger of ", triggerEntity);
-    });
+        if (hasTrigger) {
+            triggers[biblio.getName().match(/biblio #\[(.*)\]/)[1]] = [biblio.getEUID(), false];
+        }
+    }
   }
 
   async function InitFirstPersonController(charCtlSceneUUID) {
