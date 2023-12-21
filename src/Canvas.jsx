@@ -107,7 +107,6 @@ export const Canvas = () => {
         }
     }
   }
-
   async function InitFirstPersonController(charCtlSceneUUID) {
     // To spawn an entity we need to create an EntityTempllate and specify the
     // components we want to attach to it. In this case we only want a scene_ref
