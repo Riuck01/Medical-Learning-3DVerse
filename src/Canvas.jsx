@@ -6,7 +6,7 @@ import {
   characterControllerSceneUUID,
 } from "./config.js";
 
-export const Canvas = () => {
+export const Canvas = ({isHudDisplayed, showHud}) => {
   const status = useScript(
     `https://cdn.3dverse.com/legacy/sdk/latest/SDK3DVerse.js`,
     {
@@ -20,6 +20,13 @@ export const Canvas = () => {
 
   const initApp = useCallback(async () => {
     await SDK3DVerse.startSession({
+  
+  const triggers = {}
+  const initApp = useCallback(async () => {
+    // const playerBoundingBox = SDK3DVerse.engineAPI.cameraAPI.getActiveViewports()[0].getTransform();
+    
+    window.hudDisplayed = false;
+    await SDK3DVerse.joinOrStartSession({
       userToken: publicToken,
       sceneUUID: mainSceneUUID,
       canvas: document.getElementById('display-canvas'),
@@ -29,10 +36,91 @@ export const Canvas = () => {
         defaultControllerType: SDK3DVerse.controller_type.orbit,
       },
     }).then(async () => {
-      await InitFirstPersonController(characterControllerSceneUUID);
-    });
+      console.log("session initalized");
+      await InitFirstPersonController(characterControllerSceneUUID).then(
+        console.log("character controler initialized")
+      );
+        await InitFirstPersonController(characterControllerSceneUUID);
+
+        await getAllLibraries();
+
+        SDK3DVerse.engineAPI.onEnterTrigger((emitterEntity, triggerEntity) =>
+        {
+            console.log(emitterEntity, " entered trigger of ", triggerEntity);
+            const parent = triggerEntity.getParent()
+            if (parent) {
+                for (const chap in triggers) {
+                    console.log(parent.getEUID() === triggers[chap][0], parent.getEUID(), triggers[chap][0])
+                    if (parent.getEUID() === triggers[chap][0])
+                        triggers[chap][1] = true
+                }
+            }
+        });
+
+        SDK3DVerse.engineAPI.onExitTrigger((emitterEntity, triggerEntity) =>
+        {
+            console.log(emitterEntity, " exited trigger of ", triggerEntity);
+            const parent = triggerEntity.getParent()
+            if (parent) {
+                for (const chap in triggers) {
+                    if (parent.getEUID() === triggers[chap][0])
+                        triggers[chap][1] = false
+                }
+            }
+        });
+
+        function update()
+        {
+
+        }
+        SDK3DVerse.notifier.on('onFramePreRender', update);
+
+        document.getElementById("display-canvas").addEventListener("mousedown", async (e) => {
+            console.log("clicked", e)
+
+            const object = (await SDK3DVerse.engineAPI.castScreenSpaceRay(e.screenX, e.screenY, false, false, true)).entity
+            console.log(object, object !== null)
+            if (object !== null) {
+                if (object.hasParent()) {
+                    let parent = object.getParent()
+
+                    console.log(parent.getName())
+                    while (!parent.getName().startsWith("biblio")) {
+                        if (parent.hasParent()) {
+                            parent = parent.getParent()
+                            console.log(parent.getName())
+                        } else {
+                            parent = null
+                            break
+                        }
+                    }
+
+                    console.log("We finally got this: "+parent)
+                }
+            }
+        })
+    })
   }, []);
 
+  async function getAllLibraries() {
+    const scene = (await SDK3DVerse.engineAPI.findEntitiesByEUID("7643ab3f-d337-48cc-9475-e02b7aa9c49a"))[0];
+
+    const children = await scene.getChildren()
+
+    const biblios = children.filter((child) =>
+        child.getName().startsWith("biblio")// && child.isAttached('physics_material')
+    )
+
+    for (const biblio of biblios) {
+        const hasTrigger = (await biblio.getChildren()).find((child) =>
+            child.getName() === "pdf-trigger" && child.isAttached('physics_material') && child.isAttached("box_geometry")
+        );
+
+        if (hasTrigger) {
+            triggers[biblio.getName().match(/biblio #\[(.*)\]/)[1]] = [biblio.getEUID(), false];
+        }
+    }
+  }
   async function InitFirstPersonController(charCtlSceneUUID) {
     const playerTemplate = new SDK3DVerse.EntityTemplate();
     playerTemplate.attachComponent("scene_ref", { value: charCtlSceneUUID });
@@ -52,6 +140,28 @@ export const Canvas = () => {
 
     SDK3DVerse.engineAPI.assignClientToScripts(firstPersonController);
     SDK3DVerse.setMainCamera(firstPersonCamera);
+
+    const doorBoundingBox = (await SDK3DVerse.engineAPI.findEntitiesByEUID('b4f86ad3-47d3-48cf-9305-1b69f85800d7'))[0];
+    
+    SDK3DVerse.engineAPI.onEnterTrigger((player, door) =>
+    {
+      console.log("colision occured");
+      if (door === doorBoundingBox)
+      {
+        console.log(isHudDisplayed);
+        showHud(true);
+      }
+    });
+
+    SDK3DVerse.engineAPI.onExitTrigger((player, door) =>
+    {
+      console.log("colision exitted");
+      if (door === doorBoundingBox)
+      {
+        console.log(isHudDisplayed);
+        showHud(false);
+      }
+    });
   }
 
   const handleToggleScene = async () => {
@@ -152,7 +262,7 @@ export const Canvas = () => {
     if (status === 'ready') {
       initApp();
     }
-  }, [status]);
+  }, [status, initApp]);
 
   return (
     <>

@@ -1,5 +1,13 @@
 
-.HUD {
+.hud {
+    position: fixed;
+    display: flex;
+    margin: 2em;
+    padding-right: 1em;
+}
+
+.modal-body {
+    font-size: 1.1em;
     position: absolute;
     display: flex;
     color: rgb(0, 0, 0);
