@@ -177,34 +177,9 @@ export const Canvas = ({isHudDisplayed, showHud}) => {
     }
   };
 
-  const handleToggleScene2 = async () => {
-    if (linkedSceneEntity) {
-      await SDK3DVerse.engineAPI.deleteEntities([linkedSceneEntity]);
-      setLinkedSceneEntity(null);
-      setPlacingElement(false);
-    } else {
-      setLinkedSceneEntity(await spawnSceneLinker2({ position: [-6.200027, 1.195431, -2.294269] }));
-      setLinkedSceneEntity2(await spawnSceneLinker2({ position: [2.053556, 1.148622, -7.25245] }));
-      setPlacingElement(true);
-    }
-  };
-
-  const handleToggleScene3 = async () => {
-    if (linkedSceneEntity) {
-      await SDK3DVerse.engineAPI.deleteEntities([linkedSceneEntity]);
-      setLinkedSceneEntity(null);
-      setPlacingElement(false);
-    } else {
-      setLinkedSceneEntity(await spawnSceneLinker3({ position: [-6.200027, 1.195431, -2.294269] }));
-      setLinkedSceneEntity2(await spawnSceneLinker3({ position: [2.053556, 1.148622, -7.25245] }));
-      setPlacingElement(true);
-    }
-  };
   
 
-  const sceneToLinkUUID = '9e577f34-dcb3-4d84-8517-bfa3d3069029';
-  const sceneToLinkUUID2 = '797641f9-b0ed-4cba-bad1-4bef7f62e6a0';
-  const sceneToLinkUUID3 = '79b59f1c-8d82-43f9-8853-49a2d1a9b433';
+  const sceneToLinkUUID = '79b59f1c-8d82-43f9-8853-49a2d1a9b433';
 
   const spawnSceneLinker = async function (sceneTransform, options = {}) {
     const {
@@ -221,40 +196,6 @@ export const Canvas = ({isHudDisplayed, showHud}) => {
     const entity = await template.instantiateTransientEntity("linked scene name", parentEntity, deleteOnClientDisconnection);
     return entity;
   };
-
-  const spawnSceneLinker2 = async function (sceneTransform, options = {}) {
-    const {
-      parentEntity = null,
-      deleteOnClientDisconnection = true
-    } = options;
-
-    let template = new SDK3DVerse.EntityTemplate();
-
-    // Ajouter une référence de scène et une transformation locale
-    template.attachComponent('scene_ref', { value: sceneToLinkUUID2 });
-    template.attachComponent('local_transform', sceneTransform);
-
-    const entity = await template.instantiateTransientEntity("linked scene name", parentEntity, deleteOnClientDisconnection);
-    return entity;
-  };
-
-  const spawnSceneLinker3 = async function (sceneTransform, options = {}) {
-    const {
-      parentEntity = null,
-      deleteOnClientDisconnection = true
-    } = options;
-
-    let template = new SDK3DVerse.EntityTemplate();
-
-    // Ajouter une référence de scène et une transformation locale
-    template.attachComponent('scene_ref', { value: sceneToLinkUUID3 });
-    template.attachComponent('local_transform', sceneTransform);
-
-    const entity = await template.instantiateTransientEntity("linked scene name", parentEntity, deleteOnClientDisconnection);
-    return entity;
-  };
-
-
 
   useEffect(() => {
     if (status === 'ready') {
@@ -274,12 +215,6 @@ export const Canvas = ({isHudDisplayed, showHud}) => {
         }}
         tabIndex="1"
       ></canvas>
-      <button onClick={handleToggleScene}>
-        {placingElement ? 'Cancel Placement' : 'Place Element'}
-      </button>
-      <button onClick={handleToggleScene}>
-        {placingElement ? 'Cancel Placement' : 'Place Element'}
-      </button>
       <button onClick={handleToggleScene}>
         {placingElement ? 'Cancel Placement' : 'Place Element'}
       </button>
