@@ -1,10 +1,7 @@
 
-.HUD {
+.hud {
     position: fixed;
     display: flex;
     margin: 2em;
-}
-
-.modal-body {
-    font-size: 1.1em;
+    padding-right: 1em;
 }

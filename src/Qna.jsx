@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 
-export function Qna() {
+export default function Qna() {
   const [open, setShow] = useState(false);
   const closeForm = () => setShow(false);
   const openForm = () => setShow(true);
