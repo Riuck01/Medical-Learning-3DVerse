@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { Qna } from './Qna';
 
-export function HUD() {
+export function HUD({ isHudDisplayed }) {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -16,25 +16,28 @@ export function HUD() {
   const patientProb = "joueur lol";
   const patientInfo = "";
 
-  return (
-    <div className='HUD'>
-      <Button variant="primary" onClick={handleShow}>
-        Fiche Patient
-      </Button>
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Fiche Patient</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <div className='modal-body'>
-            <b>Nom:</b> {patientlName} <b>Prénom:</b> {patientfName} <br/>
-            <b>Age:</b> {patientAge} <br/>
-            <b>Problèmes:</b> {patientProb} <br/>
-            <b>Info importante:</b> {patientInfo}
-          </div>
-        </Modal.Body>
-      </Modal>
-      <Qna/>
-    </div>
-  );
+  if (isHudDisplayed) {
+    return (
+      <div className='HUD'>
+        <Button variant="primary" onClick={handleShow}>
+          Fiche Patient
+        </Button>
+        <Modal show={show} onHide={handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Fiche Patient</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <div className='modal-body'>
+              <b>Nom:</b> {patientlName} <b>Prénom:</b> {patientfName} <br/>
+              <b>Age:</b> {patientAge} <br/>
+              <b>Problèmes:</b> {patientProb} <br/>
+              <b>Info importante:</b> {patientInfo}
+            </div>
+          </Modal.Body>
+        </Modal>
+        <Qna/>
+      </div>
+    );
+  }
+  return null;
 }

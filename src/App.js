@@ -7,18 +7,10 @@ function App() {
 
   const [hudDisplayed, showHud] = useState(false);
 
-  if (hudDisplayed)
-  {
-    return (
-      <div className='App'>
-        <HUD/>
-        <Canvas props={[hudDisplayed, showHud]}/>
-      </div>
-    );
-  }
   return (
     <div className='App'>
-      <Canvas props={[hudDisplayed, showHud]}/>
+      <HUD isHudDisplayed={hudDisplayed}/>
+      <Canvas isHudDisplayed={hudDisplayed} showHud={showHud}/>
     </div>
   );
 }

@@ -6,7 +6,7 @@ import {
     characterControllerSceneUUID,
   } from "./config.js";
 
-export const Canvas = (props) => {
+export const Canvas = ({isHudDisplayed, showHud}) => {
   const status = useScript(
     `https://cdn.3dverse.com/legacy/sdk/latest/SDK3DVerse.js`,
     {
@@ -83,7 +83,18 @@ export const Canvas = (props) => {
       console.log("colision occured");
       if (door === doorBoundingBox)
       {
-        props.props[1](!props.props[0]);
+        console.log(isHudDisplayed);
+        showHud(true);
+      }
+    });
+
+    SDK3DVerse.engineAPI.onExitTrigger((player, door) =>
+    {
+      console.log("colision exitted");
+      if (door === doorBoundingBox)
+      {
+        console.log(isHudDisplayed);
+        showHud(false);
       }
     });
   }
