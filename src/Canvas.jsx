@@ -15,6 +15,7 @@ export const Canvas = () => {
   );
 
   const [linkedSceneEntity, setLinkedSceneEntity] = useState(null);
+  const [linkedSceneEntity2, setLinkedSceneEntity2] = useState(null);
   const [placingElement, setPlacingElement] = useState(false);
 
   const initApp = useCallback(async () => {
@@ -54,16 +55,49 @@ export const Canvas = () => {
   }
 
   const handleToggleScene = async () => {
-    if (placingElement) {
+    if (linkedSceneEntity) {
+      await SDK3DVerse.engineAPI.deleteEntities([linkedSceneEntity], [linkedSceneEntity2]);
+      setLinkedSceneEntity(null);
+      setPlacingElement(false);
+      await SDK3DVerse.engineAPI.deleteEntities([linkedSceneEntity2]);
+      setLinkedSceneEntity2(null);
       setPlacingElement(false);
     } else {
-      setLinkedSceneEntity(await spawnSceneLinker({ position: [0, 0, -3] }));
+      setLinkedSceneEntity(await spawnSceneLinker({ position: [-6.200027, 1.195431, -2.294269] }));
+      setLinkedSceneEntity2(await spawnSceneLinker({ position: [2.053556, 1.148622, -7.25245] }));
       setPlacingElement(true);
     }
   };
 
+  const handleToggleScene2 = async () => {
+    if (linkedSceneEntity) {
+      await SDK3DVerse.engineAPI.deleteEntities([linkedSceneEntity]);
+      setLinkedSceneEntity(null);
+      setPlacingElement(false);
+    } else {
+      setLinkedSceneEntity(await spawnSceneLinker2({ position: [-6.200027, 1.195431, -2.294269] }));
+      setLinkedSceneEntity2(await spawnSceneLinker2({ position: [2.053556, 1.148622, -7.25245] }));
+      setPlacingElement(true);
+    }
+  };
+
+  const handleToggleScene3 = async () => {
+    if (linkedSceneEntity) {
+      await SDK3DVerse.engineAPI.deleteEntities([linkedSceneEntity]);
+      setLinkedSceneEntity(null);
+      setPlacingElement(false);
+    } else {
+      setLinkedSceneEntity(await spawnSceneLinker3({ position: [-6.200027, 1.195431, -2.294269] }));
+      setLinkedSceneEntity2(await spawnSceneLinker3({ position: [2.053556, 1.148622, -7.25245] }));
+      setPlacingElement(true);
+    }
+  };
+  
+
   const sceneToLinkUUID = '9e577f34-dcb3-4d84-8517-bfa3d3069029';
-  let btnToggleScene;
+  const sceneToLinkUUID2 = '797641f9-b0ed-4cba-bad1-4bef7f62e6a0';
+  const sceneToLinkUUID3 = '79b59f1c-8d82-43f9-8853-49a2d1a9b433';
+
   const spawnSceneLinker = async function (sceneTransform, options = {}) {
     const {
       parentEntity = null,
@@ -80,18 +114,39 @@ export const Canvas = () => {
     return entity;
   };
 
-  window.toggleSceneLinker = async function() {
-    if(linkedSceneEntity) {
-        await SDK3DVerse.engineAPI.deleteEntities([linkedSceneEntity]).finally(() => {
-            linkedSceneEntity = null;
-            btnToggleScene.innerText = "Spawn Scene";
-        });
-    }
-    else {
-        linkedSceneEntity = await spawnSceneLinker({ position: [0, 0, -3] });
-        btnToggleScene.innerText = "Delete Scene";
-    }
-}
+  const spawnSceneLinker2 = async function (sceneTransform, options = {}) {
+    const {
+      parentEntity = null,
+      deleteOnClientDisconnection = true
+    } = options;
+
+    let template = new SDK3DVerse.EntityTemplate();
+
+    // Ajouter une référence de scène et une transformation locale
+    template.attachComponent('scene_ref', { value: sceneToLinkUUID2 });
+    template.attachComponent('local_transform', sceneTransform);
+
+    const entity = await template.instantiateTransientEntity("linked scene name", parentEntity, deleteOnClientDisconnection);
+    return entity;
+  };
+
+  const spawnSceneLinker3 = async function (sceneTransform, options = {}) {
+    const {
+      parentEntity = null,
+      deleteOnClientDisconnection = true
+    } = options;
+
+    let template = new SDK3DVerse.EntityTemplate();
+
+    // Ajouter une référence de scène et une transformation locale
+    template.attachComponent('scene_ref', { value: sceneToLinkUUID3 });
+    template.attachComponent('local_transform', sceneTransform);
+
+    const entity = await template.instantiateTransientEntity("linked scene name", parentEntity, deleteOnClientDisconnection);
+    return entity;
+  };
+
+
 
   useEffect(() => {
     if (status === 'ready') {
@@ -111,7 +166,12 @@ export const Canvas = () => {
         }}
         tabIndex="1"
       ></canvas>
-
+      <button onClick={handleToggleScene}>
+        {placingElement ? 'Cancel Placement' : 'Place Element'}
+      </button>
+      <button onClick={handleToggleScene}>
+        {placingElement ? 'Cancel Placement' : 'Place Element'}
+      </button>
       <button onClick={handleToggleScene}>
         {placingElement ? 'Cancel Placement' : 'Place Element'}
       </button>
