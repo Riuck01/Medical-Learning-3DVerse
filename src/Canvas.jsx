@@ -1,10 +1,10 @@
-import { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useScript } from '@uidotdev/usehooks';
 import {
-    publicToken,
-    mainSceneUUID,
-    characterControllerSceneUUID,
-  } from "./config.js";
+  publicToken,
+  mainSceneUUID,
+  characterControllerSceneUUID,
+} from "./config.js";
 
 export const Canvas = ({isHudDisplayed, showHud}) => {
   const status = useScript(
@@ -13,6 +13,13 @@ export const Canvas = ({isHudDisplayed, showHud}) => {
       removeOnUnmount: false,
     }
   );
+
+  const [linkedSceneEntity, setLinkedSceneEntity] = useState(null);
+  const [linkedSceneEntity2, setLinkedSceneEntity2] = useState(null);
+  const [placingElement, setPlacingElement] = useState(false);
+
+  const initApp = useCallback(async () => {
+    await SDK3DVerse.startSession({
   
   const triggers = {}
   const initApp = useCallback(async () => {
@@ -115,44 +122,23 @@ export const Canvas = ({isHudDisplayed, showHud}) => {
     }
   }
   async function InitFirstPersonController(charCtlSceneUUID) {
-    // To spawn an entity we need to create an EntityTempllate and specify the
-    // components we want to attach to it. In this case we only want a scene_ref
-    // that points to the character controller scene.
     const playerTemplate = new SDK3DVerse.EntityTemplate();
     playerTemplate.attachComponent("scene_ref", { value: charCtlSceneUUID });
-  
-    // Passing null as parent entity will instantiate our new entity at the root
-    // of the main scene.
     const parentEntity = null;
-    // Setting this option to true will ensure that our entity will be destroyed
-    // when the client is disconnected from the session, making sure we don't
-    // leave our 'dead' player body behind.
     const deleteOnClientDisconnection = true;
-    // We don't want the player to be saved forever in the scene, so we
-    // instantiate a transient entity.
-    // Note that an entity template can be instantiated multiple times.
-    // Each instantiation results in a new entity.
     const playerSceneEntity = await playerTemplate.instantiateTransientEntity(
       "Player",
       parentEntity,
       deleteOnClientDisconnection
     );
-  
-    // The character controller scene is setup as having a single entity at its
-    // root which is the first person controller itself.
+
     const firstPersonController = (await playerSceneEntity.getChildren())[0];
-    // Look for the first person camera in the children of the controller.
     const children = await firstPersonController.getChildren();
     const firstPersonCamera = children.find((child) =>
       child.isAttached("camera")
     );
-  
-    // We need to assign the current client to the first person controller
-    // script which is attached to the firstPersonController entity.
-    // This allows the script to know which client inputs it should read.
+
     SDK3DVerse.engineAPI.assignClientToScripts(firstPersonController);
-  
-    // Finally set the first person camera as the main camera.
     SDK3DVerse.setMainCamera(firstPersonCamera);
 
     const doorBoundingBox = (await SDK3DVerse.engineAPI.findEntitiesByEUID('b4f86ad3-47d3-48cf-9305-1b69f85800d7'))[0];
@@ -178,6 +164,100 @@ export const Canvas = ({isHudDisplayed, showHud}) => {
     });
   }
 
+  const handleToggleScene = async () => {
+    if (linkedSceneEntity) {
+      await SDK3DVerse.engineAPI.deleteEntities([linkedSceneEntity], [linkedSceneEntity2]);
+      setLinkedSceneEntity(null);
+      setPlacingElement(false);
+      await SDK3DVerse.engineAPI.deleteEntities([linkedSceneEntity2]);
+      setLinkedSceneEntity2(null);
+      setPlacingElement(false);
+    } else {
+      setLinkedSceneEntity(await spawnSceneLinker({ position: [-6.200027, 1.195431, -2.294269] }));
+      setLinkedSceneEntity2(await spawnSceneLinker({ position: [2.053556, 1.148622, -7.25245] }));
+      setPlacingElement(true);
+    }
+  };
+
+  const handleToggleScene2 = async () => {
+    if (linkedSceneEntity) {
+      await SDK3DVerse.engineAPI.deleteEntities([linkedSceneEntity]);
+      setLinkedSceneEntity(null);
+      setPlacingElement(false);
+    } else {
+      setLinkedSceneEntity(await spawnSceneLinker2({ position: [-6.200027, 1.195431, -2.294269] }));
+      setLinkedSceneEntity2(await spawnSceneLinker2({ position: [2.053556, 1.148622, -7.25245] }));
+      setPlacingElement(true);
+    }
+  };
+
+  const handleToggleScene3 = async () => {
+    if (linkedSceneEntity) {
+      await SDK3DVerse.engineAPI.deleteEntities([linkedSceneEntity]);
+      setLinkedSceneEntity(null);
+      setPlacingElement(false);
+    } else {
+      setLinkedSceneEntity(await spawnSceneLinker3({ position: [-6.200027, 1.195431, -2.294269] }));
+      setLinkedSceneEntity2(await spawnSceneLinker3({ position: [2.053556, 1.148622, -7.25245] }));
+      setPlacingElement(true);
+    }
+  };
+  
+
+  const sceneToLinkUUID = '9e577f34-dcb3-4d84-8517-bfa3d3069029';
+  const sceneToLinkUUID2 = '797641f9-b0ed-4cba-bad1-4bef7f62e6a0';
+  const sceneToLinkUUID3 = '79b59f1c-8d82-43f9-8853-49a2d1a9b433';
+
+  const spawnSceneLinker = async function (sceneTransform, options = {}) {
+    const {
+      parentEntity = null,
+      deleteOnClientDisconnection = true
+    } = options;
+
+    let template = new SDK3DVerse.EntityTemplate();
+
+    // Ajouter une référence de scène et une transformation locale
+    template.attachComponent('scene_ref', { value: sceneToLinkUUID });
+    template.attachComponent('local_transform', sceneTransform);
+
+    const entity = await template.instantiateTransientEntity("linked scene name", parentEntity, deleteOnClientDisconnection);
+    return entity;
+  };
+
+  const spawnSceneLinker2 = async function (sceneTransform, options = {}) {
+    const {
+      parentEntity = null,
+      deleteOnClientDisconnection = true
+    } = options;
+
+    let template = new SDK3DVerse.EntityTemplate();
+
+    // Ajouter une référence de scène et une transformation locale
+    template.attachComponent('scene_ref', { value: sceneToLinkUUID2 });
+    template.attachComponent('local_transform', sceneTransform);
+
+    const entity = await template.instantiateTransientEntity("linked scene name", parentEntity, deleteOnClientDisconnection);
+    return entity;
+  };
+
+  const spawnSceneLinker3 = async function (sceneTransform, options = {}) {
+    const {
+      parentEntity = null,
+      deleteOnClientDisconnection = true
+    } = options;
+
+    let template = new SDK3DVerse.EntityTemplate();
+
+    // Ajouter une référence de scène et une transformation locale
+    template.attachComponent('scene_ref', { value: sceneToLinkUUID3 });
+    template.attachComponent('local_transform', sceneTransform);
+
+    const entity = await template.instantiateTransientEntity("linked scene name", parentEntity, deleteOnClientDisconnection);
+    return entity;
+  };
+
+
+
   useEffect(() => {
     if (status === 'ready') {
       initApp();
@@ -196,6 +276,15 @@ export const Canvas = ({isHudDisplayed, showHud}) => {
         }}
         tabIndex="1"
       ></canvas>
+      <button onClick={handleToggleScene}>
+        {placingElement ? 'Cancel Placement' : 'Place Element'}
+      </button>
+      <button onClick={handleToggleScene}>
+        {placingElement ? 'Cancel Placement' : 'Place Element'}
+      </button>
+      <button onClick={handleToggleScene}>
+        {placingElement ? 'Cancel Placement' : 'Place Element'}
+      </button>
     </>
   );
 };
