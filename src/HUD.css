@@ -1,8 +1,9 @@
 
-.HUD {
+.hud {
     position: fixed;
     display: flex;
     margin: 2em;
+    padding-right: 1em;
 }
 
 .modal-body {
