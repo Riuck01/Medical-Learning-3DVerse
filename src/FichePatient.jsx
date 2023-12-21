@@ -17,24 +17,22 @@ export default function FichePatient() {
   const patientInfo = "une information quelconque";
   
   return (
-  <div className=''>
-    <Button variant="primary" onClick={handleShow}>
-    Fiche Patient
-    </Button>
-    <Modal show={show} onHide={handleClose}>
-      <Modal.Header closeButton>
-        <Modal.Title>Fiche Patient</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <div className=''>
-        <b>Nom:</b> {patientlName} <br/>
-        <b>Prénom:</b> {patientfName} <br/>
-        <b>Age:</b> {patientAge} <br/>
-        <b>Problèmes:</b> {patientProb} <br/>
-        <b>Info importante:</b> {patientInfo}
-        </div>
-      </Modal.Body>
-    </Modal>
-  </div>
+    <div className=''>
+      <Button variant="primary" onClick={handleShow}>
+      Fiche Patient
+      </Button>
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Body>
+          <div className=''>
+          <h2>Fiche Patient</h2>
+            <b>Nom:</b> {patientlName} <br/>
+            <b>Prénom:</b> {patientfName} <br/>
+            <b>Age:</b> {patientAge} <br/>
+            <b>Problèmes:</b> {patientProb} <br/>
+            <b>Info importante:</b> {patientInfo}
+          </div>
+        </Modal.Body>
+      </Modal>
+    </div>
   );
 }
