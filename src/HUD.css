@@ -42,3 +42,14 @@
   font-size: 20px;
   cursor: pointer;
 }
+
+.hud-chapter {
+  position: absolute;
+  left: 50%;
+  top: 10px;
+  font-size: large;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #fff;
+  text-align: center;
+  transform: translate(-50%, 0%);
+}

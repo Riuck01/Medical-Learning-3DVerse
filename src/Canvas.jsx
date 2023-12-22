@@ -6,7 +6,7 @@ import {
     characterControllerSceneUUID,
   } from "./config.js";
 
-export const Canvas = ({isHudDisplayed, showHud}) => {
+export const Canvas = ({isHudDisplayed, showHud, setChapter}) => {
   const status = useScript(
     `https://cdn.3dverse.com/legacy/sdk/latest/SDK3DVerse.js`,
     {
@@ -46,6 +46,7 @@ export const Canvas = ({isHudDisplayed, showHud}) => {
                     console.log(parent.getEUID() === triggers[chap][0], parent.getEUID(), triggers[chap][0])
                     if (parent.getEUID() === triggers[chap][0])
                         triggers[chap][1] = true
+                        setChapter(chap)
                 }
             }
         });
@@ -60,6 +61,7 @@ export const Canvas = ({isHudDisplayed, showHud}) => {
                         triggers[chap][1] = false
                 }
             }
+            setChapter("")
         });
 
         function update()
@@ -89,6 +91,15 @@ export const Canvas = ({isHudDisplayed, showHud}) => {
                     }
 
                     console.log("We finally got this: "+parent)
+                    if (parent !== null) {
+                        let id = parent.getName().match(/biblio #\[(.*)\]/)[1]
+                        console.log(id, triggers[id], triggers[id] !== undefined && triggers[id][1] === true)
+                        if (id !== null && triggers[id] !== undefined && triggers[id][1] === true) {
+                            console.log("Changing "+triggers[id])
+                            //setChapter(id)
+                        }
+                        console.log(parent.getName(), parent.getName().match(/biblio #\[(.*)\]/)[1])
+                    }
                 }
             }
         })
@@ -113,6 +124,8 @@ export const Canvas = ({isHudDisplayed, showHud}) => {
             triggers[biblio.getName().match(/biblio #\[(.*)\]/)[1]] = [biblio.getEUID(), false];
         }
     }
+
+    console.log(triggers)
   }
   async function InitFirstPersonController(charCtlSceneUUID) {
     // To spawn an entity we need to create an EntityTempllate and specify the

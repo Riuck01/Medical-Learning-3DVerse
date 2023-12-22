@@ -33,6 +33,7 @@
   max-width: 800px; 
   max-height: 600px; 
   overflow: auto;
+  display: block;
 }
 
 .close-button {
