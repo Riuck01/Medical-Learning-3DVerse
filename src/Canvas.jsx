@@ -17,9 +17,6 @@ export const Canvas = ({isHudDisplayed, showHud}) => {
   const [linkedSceneEntity, setLinkedSceneEntity] = useState(null);
   const [linkedSceneEntity2, setLinkedSceneEntity2] = useState(null);
   const [placingElement, setPlacingElement] = useState(false);
-
-  const initApp = useCallback(async () => {
-    await SDK3DVerse.startSession({
   
   const triggers = {}
   const initApp = useCallback(async () => {
