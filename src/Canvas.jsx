@@ -21,6 +21,10 @@ export const Canvas = ({isHudDisplayed, showHud}) => {
   const triggers = {}
   const initApp = useCallback(async () => {
     // const playerBoundingBox = SDK3DVerse.engineAPI.cameraAPI.getActiveViewports()[0].getTransform();
+
+    const canvas = document.getElementById("display-canvas");
+
+    canvas.addEventListener('mousedown', () => setFPSCameraController(canvas));
     
     window.hudDisplayed = false;
     await SDK3DVerse.joinOrStartSession({
@@ -98,6 +102,25 @@ export const Canvas = ({isHudDisplayed, showHud}) => {
         })
     })
   }, []);
+
+  //------------------------------------------------------------------------------
+  async function setFPSCameraController(canvas){
+    // Remove the required click for the LOOK_LEFT, LOOK_RIGHT, LOOK_UP, and 
+    // LOOK_DOWN actions.
+    SDK3DVerse.actionMap.values["LOOK_LEFT"][0] = ["MOUSE_AXIS_X_POS"];
+    SDK3DVerse.actionMap.values["LOOK_RIGHT"][0] = ["MOUSE_AXIS_X_NEG"];
+    SDK3DVerse.actionMap.values["LOOK_DOWN"][0] = ["MOUSE_AXIS_Y_NEG"];
+    SDK3DVerse.actionMap.values["LOOK_UP"][0] = ["MOUSE_AXIS_Y_POS"];
+    SDK3DVerse.actionMap.propagate();
+
+    // Lock the mouse pointer.
+    canvas.requestPointerLock = (
+      canvas.requestPointerLock 
+      || canvas.mozRequestPointerLock 
+      || canvas.webkitPointerLockElement
+    );
+    canvas.requestPointerLock();
+  };
 
   async function getAllLibraries() {
     const scene = (await SDK3DVerse.engineAPI.findEntitiesByEUID("7643ab3f-d337-48cc-9475-e02b7aa9c49a"))[0];
