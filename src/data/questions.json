@@ -1,0 +1,50 @@
+[
+    {
+      "question" : "Principes fondamentaux de la locomotion :",
+      "options" :  ["La Progressivité est spécifique à l'entraînement en force musculaire" , "La spécificité de l'entraînement représente les caractéristiques personnelles de l'individu (ex : génétique)" , "Le principe de réversibilité décrit la perte des adaptations physiologiques à l'exercice lors de l'arrêt de l'entraînement" , "La réversibilité décrit la perte des adaptations physiologiques si on réduit les charges lors de l'entraînement", "L'entraînement/ exercice physique représente toute activité mettant en mouvement les muscles (qqchose comme ca)" ],
+      "correctAnswer" : ["Le principe de réversibilité décrit la perte des adaptations physiologiques à l'exercice lors de l'arrêt de l'entraînement"]
+      },
+      
+      {
+      "question" : "A propos de l'exercice physique (K') :",
+      "options" :  ["Est défini comme tout mouvement corporel produit par les muscles qui demande de l'énergie", "Une sous catégorie d'activité physique qui est planifiée, structurée et répétitive", "Le MET représente le métabolisme au repos et par convention signifie 2,5ml/kg/min", "Elle diminue l'inflammation chronique chez les obèses" ],
+      "correctAnswer" : ["Une sous catégorie d'activité physique qui est planifiée, structurée et répétitive", "Elle diminue l'inflammation chronique chez les obèses"]
+      },
+      
+      {
+      "question" : "Gerard a la poliomyélite et présente une faiblesse du quadriceps (force évalué à ⅖). En faisant une analyse quantifiée de la marche on peut observer :",
+      "options" :  ["Extension du tronc vers l'avant", "Moment fléchisseur interne du genou pendant la phase d'appui", "Force de réaction au sol passe à l'arrière du genou", "Flexion permanente du genou pendant la phase d'appuis", "Jambe tendue en appui unipodal"],
+      "correctAnswer" : ["Jambe tendue en appui unipodal"]
+      },
+      
+      {
+      "question" : "Sont des facteurs influençant la dépense énergétique :",
+      "options" :  ["Activité physique", "Nutrition", "Durée de sommeil", "La sédentarisation"],
+      "correctAnswer" : ["Activité physique", "Nutrition", "La sédentarisation"]
+      },
+      
+      {
+      "question" : "Par rapport à la marche, la course à pieds représente :",
+      "options" :  ["Une absence de phase unipodal", "Une amplitude des mouvements dans le plan sagittal diminué par rapport à la marche", "un transfert d'énergie potentielle en énergie cinétique sur un modèle de pendule inversé 24 Retranscrit SMB 2022-2023", "Un coût énergétique par distance parcourue supérieur à la marche", "Une force d'appui au sol entre 5 et 10 fois supérieur à celle mesurée pendant la marche"],
+      "correctAnswer" : [ "Un coût énergétique par distance parcourue supérieur à la marche", "Une force d'appui au sol entre 5 et 10 fois supérieur à celle mesurée pendant la marche"]
+      },
+      
+      {
+      "question" : "Concernant les principes fondamentaux de l'entraînement physique :",
+      "options" :  ["Le surentraînement en fait partie", "Le principe de réversibilité se réfère à la perte des adaptations physiologiques gagnés en cas d'arrêt de l'entraînement", "La spécificité concerne la prise en compte des variabilités individuelles de chaque sujet", "En cas d'arrêt temporaire de la résistance (charge appliquée), les gains physiologiques sont perdus", "L'adaptabilité du principe de progressivité ne s'applique que dans le cas d'un entraînement de force musculaire"],
+      "correctAnswer" : [ "Le principe de réversibilité se réfère à la perte des adaptations physiologiques gagnés en cas d'arrêt de l'entraînement" ]
+      },
+      
+      {
+      "question" : "Quel est le rôle des générateurs centraux du rythme dans la locomotion :",
+      "options" :  ["Réflexe d'extension croisée", "Pattern cyclique dans la marche", "Permet l'inhibition des mouvements volontaires", "Permet le maintien de la posture", "Permet le maintien de la posture", "Réajuster le mouvement"],
+      "correctAnswer" : ["Pattern cyclique dans la marche"]
+      },
+      
+      {
+      "question" : "Un sujet tend le bras pour attraper un objet sur une étagère. En faisant une électromyographie (EMG) on peut observer",
+      "options" :  ["Activation des muscles du bras mais pas du soléaire", "Activation des muscles du bras avant le soléaire", "Activation des muscles du bras en même temps que le soléaire", "Activation du soléaire avant les muscles du bras"],
+      "correctAnswer" : ["Activation du soléaire avant les muscles du bras"]
+      }
+  ]
+    

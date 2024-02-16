@@ -2,7 +2,7 @@ import React from 'react';
 import Qna from './Qna';
 import FichePatient from './FichePatient';
 import './hud.css'
-import PDF from './PDF';
+import { Quiz } from './components/Quiz.js';
 
 export function HUD({ isHudDisplayed }) {
 
