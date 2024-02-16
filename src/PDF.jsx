@@ -17,6 +17,7 @@ export const PDF = ({chapterSelected}) => {
 
   const openModal = async () => {
     try {
+      setPdfUrl('./'+chapterSelected+'.pdf')
       console.log('Fetching PDF:', pdfUrl);
 
       const pdfBytes = await fetch(pdfUrl).then(res => res.arrayBuffer());
