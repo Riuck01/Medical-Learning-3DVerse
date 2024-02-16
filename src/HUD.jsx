@@ -3,16 +3,22 @@ import Qna from './Qna';
 import FichePatient from './FichePatient';
 import './hud.css'
 import PDF from './PDF';
+import { chapterTitleList } from "./chapterTitleList.js"
 
-export function HUD({ isHudDisplayed }) {
+export function HUD({ isHudDisplayed, chapterSelected }) {
 
-  if (isHudDisplayed) {
-    return (
+  return (
+    <>
+      <p className='hud-chapter'>{chapterTitleList[chapterSelected]}</p>
       <div className='hud'>
-        <FichePatient/>
-        <Qna/>
+        {isHudDisplayed && (
+            <>
+              <FichePatient/>
+              <Qna/>
+            </>
+          )
+        }
       </div>
-    );
-  }
-  return null;
+    </>
+  );
 }

@@ -4,11 +4,12 @@ import './PDF.css';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
-export const PDF = () => {
+export const PDF = ({chapterSelected}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [numPages, setNumPages] = useState(null);
   const [error, setError] = useState(null);
-  const [pdfUrl, setPdfUrl] = useState('./TEST3.pdf');
+  const [pdfUrl, setPdfUrl] = useState('./'+chapterSelected+'.pdf');
+  console.log('./'+chapterSelected+'.pdf')
 
   const onDocumentLoadSuccess = ({ numPages }) => {
     setNumPages(numPages);
