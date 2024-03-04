@@ -5,11 +5,12 @@ import './PDF.css';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
-export const PDF = () => {
+export const PDF = ({chapterSelected}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [numPages, setNumPages] = useState(null);
   const [error, setError] = useState(null);
-  const [pdfUrl, setPdfUrl] = useState('./pose-platre.pdf');
+  const [pdfUrl, setPdfUrl] = useState('./'+chapterSelected+'.pdf');
+  console.log("It's this: "+chapterSelected)
 
   const onDocumentLoadSuccess = ({ numPages }) => {
     setNumPages(numPages);
@@ -17,6 +18,7 @@ export const PDF = () => {
 
   const openModal = async () => {
     try {
+      setPdfUrl('./'+chapterSelected+'.pdf')
       console.log('Fetching PDF:', pdfUrl);
 
       const pdfBytes = await fetch(pdfUrl).then(res => res.arrayBuffer());

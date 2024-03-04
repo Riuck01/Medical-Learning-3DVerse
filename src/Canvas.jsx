@@ -52,6 +52,7 @@ export const Canvas = ({isHudDisplayed, showHud, setChapter}) => {
                     console.log(parent.getEUID() === triggers[chap][0], parent.getEUID(), triggers[chap][0])
                     if (parent.getEUID() === triggers[chap][0])
                     {
+                      console.log("HEY THERE", chap, triggers[chap])
                       triggers[chap][1] = true
                       setChapter(chap)
                     }
@@ -69,7 +70,8 @@ export const Canvas = ({isHudDisplayed, showHud, setChapter}) => {
                         triggers[chap][1] = false
                 }
             }
-            setChapter("")
+            if (!isInLibTriggers())
+              setChapter("")
         });
 
         function update()
@@ -176,6 +178,15 @@ export const Canvas = ({isHudDisplayed, showHud, setChapter}) => {
         showHud(false);
       }
     });
+  }
+
+  function isInLibTriggers()
+  {
+    for (const chap in triggers) {
+      if (triggers[chap][1] === true)
+        return true
+    }
+    return false
   }
 
   const handleToggleScene = async () => {
