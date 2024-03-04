@@ -2,17 +2,27 @@ import React from 'react';
 import Qna from './Qna';
 import FichePatient from './FichePatient';
 import './hud.css'
-import { Quiz } from './components/Quiz.js';
+// import { chapterTitleList } from "./chapterTitleList.js"
 
-export function HUD({ isHudDisplayed }) {
+export function HUD({ isHudDisplayed, chapterSelected }) {
 
-  if (isHudDisplayed) {
-    return (
-      <div className='hud'>
-        <FichePatient/>
-        <Qna/>
-      </div>
-    );
+  const chapterTitleList = {
+    "chapter1": "Lesson 1: Les bases de la médecine",
+    "chapter2": "Lesson 2: Les maladies"
   }
-  return null;
+
+  return (
+    <>
+      <p className='hud-chapter'>{chapterTitleList[chapterSelected]}</p>
+      <div className='hud'>
+        {isHudDisplayed && (
+            <>
+              <FichePatient/>
+              <Qna/>
+            </>
+          )
+        }
+      </div>
+    </>
+  );
 }

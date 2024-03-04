@@ -8,7 +8,7 @@ export const PDF = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [numPages, setNumPages] = useState(null);
   const [error, setError] = useState(null);
-  const [pdfUrl, setPdfUrl] = useState('./TEST3.pdf');
+  const [pdfUrl, setPdfUrl] = useState('./pose-platre.pdf');
 
   const onDocumentLoadSuccess = ({ numPages }) => {
     setNumPages(numPages);

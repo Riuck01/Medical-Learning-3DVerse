@@ -6,7 +6,7 @@ import {
   characterControllerSceneUUID,
 } from "./config.js";
 
-export const Canvas = ({isHudDisplayed, showHud}) => {
+export const Canvas = ({isHudDisplayed, showHud, setChapter}) => {
   const status = useScript(
     `https://cdn.3dverse.com/legacy/sdk/latest/SDK3DVerse.js`,
     {
@@ -17,14 +17,11 @@ export const Canvas = ({isHudDisplayed, showHud}) => {
   const [linkedSceneEntity, setLinkedSceneEntity] = useState(null);
   const [linkedSceneEntity2, setLinkedSceneEntity2] = useState(null);
   const [placingElement, setPlacingElement] = useState(false);
+
   
   const triggers = {}
   const initApp = useCallback(async () => {
     // const playerBoundingBox = SDK3DVerse.engineAPI.cameraAPI.getActiveViewports()[0].getTransform();
-
-    const canvas = document.getElementById("display-canvas");
-
-    canvas.addEventListener('mousedown', () => setFPSCameraController(canvas));
     
     window.hudDisplayed = false;
     await SDK3DVerse.joinOrStartSession({
@@ -53,7 +50,10 @@ export const Canvas = ({isHudDisplayed, showHud}) => {
                 for (const chap in triggers) {
                     console.log(parent.getEUID() === triggers[chap][0], parent.getEUID(), triggers[chap][0])
                     if (parent.getEUID() === triggers[chap][0])
-                        triggers[chap][1] = true
+                    {
+                      triggers[chap][1] = true
+                      setChapter(chap)
+                    }
                 }
             }
         });
@@ -68,6 +68,7 @@ export const Canvas = ({isHudDisplayed, showHud}) => {
                         triggers[chap][1] = false
                 }
             }
+            setChapter("")
         });
 
         function update()
@@ -97,30 +98,20 @@ export const Canvas = ({isHudDisplayed, showHud}) => {
                     }
 
                     console.log("We finally got this: "+parent)
+                    if (parent !== null) {
+                        let id = parent.getName().match(/biblio #\[(.*)\]/)[1]
+                        console.log(id, triggers[id], triggers[id] !== undefined && triggers[id][1] === true)
+                        if (id !== null && triggers[id] !== undefined && triggers[id][1] === true) {
+                            console.log("Changing "+triggers[id])
+                            //setChapter(id)
+                        }
+                        console.log(parent.getName(), parent.getName().match(/biblio #\[(.*)\]/)[1])
+                    }
                 }
             }
         })
     })
   }, []);
-
-  //------------------------------------------------------------------------------
-  async function setFPSCameraController(canvas){
-    // Remove the required click for the LOOK_LEFT, LOOK_RIGHT, LOOK_UP, and 
-    // LOOK_DOWN actions.
-    SDK3DVerse.actionMap.values["LOOK_LEFT"][0] = ["MOUSE_AXIS_X_POS"];
-    SDK3DVerse.actionMap.values["LOOK_RIGHT"][0] = ["MOUSE_AXIS_X_NEG"];
-    SDK3DVerse.actionMap.values["LOOK_DOWN"][0] = ["MOUSE_AXIS_Y_NEG"];
-    SDK3DVerse.actionMap.values["LOOK_UP"][0] = ["MOUSE_AXIS_Y_POS"];
-    SDK3DVerse.actionMap.propagate();
-
-    // Lock the mouse pointer.
-    canvas.requestPointerLock = (
-      canvas.requestPointerLock 
-      || canvas.mozRequestPointerLock 
-      || canvas.webkitPointerLockElement
-    );
-    canvas.requestPointerLock();
-  };
 
   async function getAllLibraries() {
     const scene = (await SDK3DVerse.engineAPI.findEntitiesByEUID("7643ab3f-d337-48cc-9475-e02b7aa9c49a"))[0];
@@ -140,6 +131,8 @@ export const Canvas = ({isHudDisplayed, showHud}) => {
             triggers[biblio.getName().match(/biblio #\[(.*)\]/)[1]] = [biblio.getEUID(), false];
         }
     }
+
+    console.log(triggers)
   }
   async function InitFirstPersonController(charCtlSceneUUID) {
     const playerTemplate = new SDK3DVerse.EntityTemplate();
@@ -199,34 +192,9 @@ export const Canvas = ({isHudDisplayed, showHud}) => {
     }
   };
 
-  const handleToggleScene2 = async () => {
-    if (linkedSceneEntity) {
-      await SDK3DVerse.engineAPI.deleteEntities([linkedSceneEntity]);
-      setLinkedSceneEntity(null);
-      setPlacingElement(false);
-    } else {
-      setLinkedSceneEntity(await spawnSceneLinker2({ position: [-6.200027, 1.195431, -2.294269] }));
-      setLinkedSceneEntity2(await spawnSceneLinker2({ position: [2.053556, 1.148622, -7.25245] }));
-      setPlacingElement(true);
-    }
-  };
-
-  const handleToggleScene3 = async () => {
-    if (linkedSceneEntity) {
-      await SDK3DVerse.engineAPI.deleteEntities([linkedSceneEntity]);
-      setLinkedSceneEntity(null);
-      setPlacingElement(false);
-    } else {
-      setLinkedSceneEntity(await spawnSceneLinker3({ position: [-6.200027, 1.195431, -2.294269] }));
-      setLinkedSceneEntity2(await spawnSceneLinker3({ position: [2.053556, 1.148622, -7.25245] }));
-      setPlacingElement(true);
-    }
-  };
   
 
-  const sceneToLinkUUID = '9e577f34-dcb3-4d84-8517-bfa3d3069029';
-  const sceneToLinkUUID2 = '797641f9-b0ed-4cba-bad1-4bef7f62e6a0';
-  const sceneToLinkUUID3 = '79b59f1c-8d82-43f9-8853-49a2d1a9b433';
+  const sceneToLinkUUID = '79b59f1c-8d82-43f9-8853-49a2d1a9b433';
 
   const spawnSceneLinker = async function (sceneTransform, options = {}) {
     const {
@@ -243,40 +211,6 @@ export const Canvas = ({isHudDisplayed, showHud}) => {
     const entity = await template.instantiateTransientEntity("linked scene name", parentEntity, deleteOnClientDisconnection);
     return entity;
   };
-
-  const spawnSceneLinker2 = async function (sceneTransform, options = {}) {
-    const {
-      parentEntity = null,
-      deleteOnClientDisconnection = true
-    } = options;
-
-    let template = new SDK3DVerse.EntityTemplate();
-
-    // Ajouter une référence de scène et une transformation locale
-    template.attachComponent('scene_ref', { value: sceneToLinkUUID2 });
-    template.attachComponent('local_transform', sceneTransform);
-
-    const entity = await template.instantiateTransientEntity("linked scene name", parentEntity, deleteOnClientDisconnection);
-    return entity;
-  };
-
-  const spawnSceneLinker3 = async function (sceneTransform, options = {}) {
-    const {
-      parentEntity = null,
-      deleteOnClientDisconnection = true
-    } = options;
-
-    let template = new SDK3DVerse.EntityTemplate();
-
-    // Ajouter une référence de scène et une transformation locale
-    template.attachComponent('scene_ref', { value: sceneToLinkUUID3 });
-    template.attachComponent('local_transform', sceneTransform);
-
-    const entity = await template.instantiateTransientEntity("linked scene name", parentEntity, deleteOnClientDisconnection);
-    return entity;
-  };
-
-
 
   useEffect(() => {
     if (status === 'ready') {
@@ -296,12 +230,6 @@ export const Canvas = ({isHudDisplayed, showHud}) => {
         }}
         tabIndex="1"
       ></canvas>
-      <button onClick={handleToggleScene}>
-        {placingElement ? 'Cancel Placement' : 'Place Element'}
-      </button>
-      <button onClick={handleToggleScene}>
-        {placingElement ? 'Cancel Placement' : 'Place Element'}
-      </button>
       <button onClick={handleToggleScene}>
         {placingElement ? 'Cancel Placement' : 'Place Element'}
       </button>
