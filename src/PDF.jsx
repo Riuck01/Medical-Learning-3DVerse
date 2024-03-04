@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
+import Button from 'react-bootstrap/Button';
 import './PDF.css';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
@@ -42,8 +43,10 @@ export const PDF = () => {
   };
 
   return (
-    <div className='PDF'>
-      <button onClick={openModal}>OPEN PDF</button>
+    <div>
+      <Button className='hud-placement2' variant="primary" onClick={openModal}>
+        Open PDF
+      </Button>
 
       {modalVisible && (
         <div className="modal-overlay">

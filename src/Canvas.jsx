@@ -5,7 +5,8 @@ import {
   mainSceneUUID,
   characterControllerSceneUUID,
 } from "./config.js";
-
+import Button from 'react-bootstrap/Button';
+import './hud.css'
 export const Canvas = ({isHudDisplayed, showHud, setChapter}) => {
   const status = useScript(
     `https://cdn.3dverse.com/legacy/sdk/latest/SDK3DVerse.js`,
@@ -194,7 +195,7 @@ export const Canvas = ({isHudDisplayed, showHud, setChapter}) => {
 
   
 
-  const sceneToLinkUUID = '79b59f1c-8d82-43f9-8853-49a2d1a9b433';
+  const sceneToLinkUUID = '7cbb895e-8954-45b6-bdf8-a819b8828973';
 
   const spawnSceneLinker = async function (sceneTransform, options = {}) {
     const {
@@ -220,7 +221,7 @@ export const Canvas = ({isHudDisplayed, showHud, setChapter}) => {
 
   return (
     <>
-      <canvas
+     <canvas
         id='display-canvas'
         style={{
           display: 'flex',
@@ -230,9 +231,10 @@ export const Canvas = ({isHudDisplayed, showHud, setChapter}) => {
         }}
         tabIndex="1"
       ></canvas>
-      <button onClick={handleToggleScene}>
-        {placingElement ? 'Cancel Placement' : 'Place Element'}
-      </button>
+      {/* Bouton Bootstrap pour faire apparaître l'objet */}
+      <Button className='hud-placement' variant="primary" onClick={handleToggleScene}>
+        {placingElement ? 'Enlever premier platre' : 'Premier platre'}
+      </Button>
     </>
   );
 };

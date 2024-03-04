@@ -52,3 +52,21 @@ color: #fff;
 text-align: center;
 transform: translate(-50%, 0%);
 }
+
+.hud-placement {
+  position: fixed;
+  top: 2em;
+  right: 2em;    
+  display: inline;
+  margin: 2em;
+  padding-right: 1em;
+}
+
+.hud-placement2 {
+  position: fixed;
+  top: 6em;
+  right: 2em;    
+  display: inline;
+  margin: 2em;
+  padding-right: 1em;
+}
