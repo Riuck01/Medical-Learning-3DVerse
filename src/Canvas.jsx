@@ -117,7 +117,7 @@ export const Canvas = ({isHudDisplayed, showHud, setChapter}) => {
   }, []);
 
   async function getAllLibraries() {
-    const scene = (await SDK3DVerse.engineAPI.findEntitiesByEUID(mainSceneUUID))[0];
+    const scene = (await SDK3DVerse.engineAPI.findEntitiesByEUID('e8161806-9f48-44f7-a729-2ace4d0a6f3a'))[0];
 
     const children = await scene.getChildren()
 
@@ -157,7 +157,7 @@ export const Canvas = ({isHudDisplayed, showHud, setChapter}) => {
     SDK3DVerse.engineAPI.assignClientToScripts(firstPersonController);
     SDK3DVerse.setMainCamera(firstPersonCamera);
 
-    const doorBoundingBox = (await SDK3DVerse.engineAPI.findEntitiesByEUID('b4f86ad3-47d3-48cf-9305-1b69f85800d7'))[0];
+    const doorBoundingBox = (await SDK3DVerse.engineAPI.findEntitiesByEUID('59c08a6f-da69-49a7-8d7f-a37cf0ada422'))[0];
     
     SDK3DVerse.engineAPI.onEnterTrigger((player, door) =>
     {
