@@ -117,7 +117,7 @@ export const Canvas = ({isHudDisplayed, showHud, setChapter}) => {
   }, []);
 
   async function getAllLibraries() {
-    const scene = (await SDK3DVerse.engineAPI.findEntitiesByEUID("7643ab3f-d337-48cc-9475-e02b7aa9c49a"))[0];
+    const scene = (await SDK3DVerse.engineAPI.findEntitiesByEUID(mainSceneUUID))[0];
 
     const children = await scene.getChildren()
 
